@@ -25,6 +25,7 @@ return {
 			"yaml",
 			"toml",
 			"tmux",
+			"vim",
 		})
 		require("hlargs").setup({})
 	end,

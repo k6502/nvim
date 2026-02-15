@@ -1,18 +1,18 @@
 return {
 	{
 		"saghen/blink.cmp",
+		lazy = false,
 		dependencies = {
+			"saghen/blink.compat",
 			"rafamadriz/friendly-snippets",
 			{
 				"Fildo7525/pretty_hover",
 				event = "LspAttach",
-				lazy = false,
 				opts = {},
 			},
 			{
 				"sontungexpt/better-diagnostic-virtual-text",
 				event = "LspAttach",
-				lazy = false,
 				config = function(_)
 					require("better-diagnostic-virtual-text").setup(opts)
 				end,

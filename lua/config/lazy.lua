@@ -20,6 +20,9 @@ vim.opt.rtp:prepend(lazypath)
 -- This is also a good place to setup other settings (vim.opt)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.termguicolors = true
 
 -- Setup lazy.nvim
 require("lazy").setup({
@@ -29,7 +32,9 @@ require("lazy").setup({
 	},
 	-- Configure any other settings here. See the documentation for more details.
 	-- colorscheme that will be used when installing plugins.
-	install = { colorscheme = { "habamax" } },
+	install = { colorscheme = { "tokyonight" } },
 	-- automatically check for plugin updates
 	checker = { enabled = true },
 })
+
+vim.cmd([[colorscheme tokyonight]])
