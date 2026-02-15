@@ -1,5 +1,8 @@
 return {
-	"nvim-treesitter/nvim-treesitter", lazy = false, build = ":TSUpdate",
+	"nvim-treesitter/nvim-treesitter",
+	lazy = false,
+	build = ":TSUpdate",
+	dependencies = { "m-demare/hlargs.nvim" },
 	config = function()
 		require("nvim-treesitter").install({
 			"lua",
@@ -21,7 +24,8 @@ return {
 			"regex",
 			"yaml",
 			"toml",
-			"tmux"
+			"tmux",
 		})
+		require("hlargs").setup({})
 	end,
 }
