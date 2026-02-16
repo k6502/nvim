@@ -5,7 +5,7 @@ return {
 		require("lualine").setup({
 			options = {
 				icons_enabled = true,
-				theme = "tokyonight",
+				theme = "teide",
 				component_separators = { left = "", right = "" },
 				section_separators = { left = "", right = "" },
 				disabled_filetypes = {
@@ -15,12 +15,12 @@ return {
 				ignore_focus = {},
 				always_divide_middle = true,
 				always_show_tabline = true,
-				globalstatus = true,
+				globalstatus = false,
 				refresh = {
 					statusline = 1000,
 					tabline = 1000,
 					winbar = 1000,
-					refresh_time = 8, -- ~60fps
+					refresh_time = 1,
 					events = {
 						"WinEnter",
 						"BufEnter",
