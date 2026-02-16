@@ -79,7 +79,7 @@ return {
 			-- (Default) Only show the documentation popup when manually triggered
 			completion = {
 				keyword = { range = "full" },
-				menu = { enabled = true },
+				menu = { enabled = true, draw = { align_to = "cursor", treesitter = { "lsp" } } },
 				ghost_text = { enabled = true },
 				documentation = {
 					auto_show = true,
@@ -91,6 +91,24 @@ return {
 
 						opts.default_implementation(opts)
 					end,
+				},
+			},
+
+			signature = {
+				enabled = true,
+				trigger = {
+					-- Show the signature help automatically
+					enabled = true,
+					-- Show the signature help window after typing any of alphanumerics, `-` or `_`
+					show_on_keyword = true,
+					blocked_trigger_characters = {},
+					blocked_retrigger_characters = {},
+					-- Show the signature help window after typing a trigger character
+					show_on_trigger_character = true,
+					-- Show the signature help window when entering insert mode
+					show_on_insert = true,
+					-- Show the signature help window when the cursor comes after a trigger character when entering insert mode
+					show_on_insert_on_trigger_character = true,
 				},
 			},
 
@@ -106,6 +124,7 @@ return {
 			--
 			-- See the fuzzy documentation for more information
 			fuzzy = { implementation = "rust", sorts = { "exact", "score", "sort_text" } },
+			term = { enabled = true },
 		},
 		opts_extend = { "sources.default" },
 	},
