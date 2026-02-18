@@ -26,7 +26,10 @@ return {
 			"toml",
 			"tmux",
 			"vim",
+			generate = true,
+			summary = true,
 		})
 		require("hlargs").setup({})
+		vim.o.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 	end,
 }

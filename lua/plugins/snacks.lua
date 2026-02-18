@@ -1,24 +1,247 @@
 return {
 	"folke/snacks.nvim",
-	dependencies = { "nvim-tree/nvim-web-devicons", "nvim-mini/mini.icons" },
+	dependencies = {
+		"nvim-tree/nvim-web-devicons",
+		"nvim-mini/mini.icons",
+		{
+			"folke/persistence.nvim",
+			event = "BufReadPre", -- this will only start session saving when an actual file was opened
+			opts = {
+				-- add any custom options here
+				dir = vim.fn.stdpath("state") .. "/sessions/", -- directory where session files are saved
+				-- minimum number of file buffers that need to be open to save
+				-- Set to 0 to always save
+				need = 0,
+				branch = true, -- use git branch to save session
+			},
+			keys = {
+				-- load the session for the current directory
+				vim.keymap.set("n", "<leader>qs", function()
+					require("persistence").load()
+				end),
+
+				-- select a session to load
+				vim.keymap.set("n", "<leader>qS", function()
+					require("persistence").select()
+				end),
+
+				-- load the last session
+				vim.keymap.set("n", "<leader>ql", function()
+					require("persistence").load({ last = true })
+				end),
+
+				-- stop Persistence => session won't be saved on exit
+				vim.keymap.set("n", "<leader>qd", function()
+					require("persistence").stop()
+				end),
+			},
+		},
+	},
 	priority = 1000,
 	lazy = false,
 	opts = {
+		animate = {
+			fps = 180,
+			easing = "outQuart",
+			duration = 200,
+		},
+		dim = {
+			---@type snacks.scope.Config
+			scope = {
+				min_size = 5,
+				max_size = 20,
+				siblings = true,
+			},
+			-- animate scopes. Enabled by default for Neovim >= 0.10
+			-- Works on older versions but has to trigger redraws during animation.
+			---@type snacks.animate.Config|{enabled?: boolean}
+			animate = {
+				enabled = vim.fn.has("nvim-0.10") == 1,
+				easing = "outQuart",
+				duration = {
+					step = 200, -- ms per step
+					total = 250, -- maximum duration
+				},
+			},
+			-- what buffers to dim
+			filter = function(buf)
+				return vim.g.snacks_dim ~= false and vim.b[buf].snacks_dim ~= false and vim.bo[buf].buftype == ""
+			end,
+		},
 		bigfile = { enabled = true },
-		dashboard = { enabled = true },
+		dashboard = {
+			sections = {
+				{ section = "header" },
+				{
+					pane = 2,
+					section = "terminal",
+					cmd = "colorscript -e square",
+					height = 5,
+					padding = 1,
+				},
+				{ section = "keys", gap = 1, padding = 1 },
+				{ pane = 2, icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
+				{ pane = 2, icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
+				{
+					pane = 2,
+					icon = " ",
+					title = "Git Status",
+					section = "terminal",
+					enabled = function()
+						return Snacks.git.get_root() ~= nil
+					end,
+					cmd = "git status --short --branch --renames",
+					height = 5,
+					padding = 1,
+					ttl = 5 * 60,
+					indent = 3,
+				},
+				{ section = "startup" },
+			},
+		},
 		explorer = { enabled = true },
-		indent = { enabled = true },
-		input = { enabled = true },
+		indent = {
+			priority = 1,
+			enabled = true,
+			char = "│",
+			animate = {
+				enabled = vim.fn.has("nvim-0.10") == 1,
+				style = "out",
+				easing = "outQuart",
+				duration = {
+					step = 200, -- ms per step
+					total = 250, -- maximum duration
+				},
+			},
+			chunk = {
+				-- when enabled, scopes will be rendered as chunks, except for the
+				-- top-level scope which will be rendered as a scope.
+				enabled = true,
+				-- only show chunk scopes in the current window
+				only_current = false,
+				priority = 200,
+				hl = "SnacksIndentChunk", ---@type string|string[] hl group for chunk scopes
+				char = {
+					corner_top = "╭",
+					corner_bottom = "╰",
+					horizontal = "─",
+					vertical = "│",
+					aarrow = "─>",
+				},
+			},
+		},
+		input = {}, -- Use defaults
 		notifier = {
 			enabled = true,
 			timeout = 3000,
 		},
+		rename = {
+			vim.api.nvim_create_autocmd({ "FileType" }, {
+				pattern = { "netrw" },
+				group = vim.api.nvim_create_augroup("NetrwOnRename", { clear = true }),
+				callback = function()
+					vim.keymap.set("n", "R", function()
+						local original_file_path = vim.b.netrw_curdir .. "/" .. vim.fn["netrw#Call"]("NetrwGetWord")
+
+						vim.ui.input(
+							{ prompt = "Move/rename to:", default = original_file_path },
+							function(target_file_path)
+								if target_file_path and target_file_path ~= "" then
+									local file_exists = vim.uv.fs_access(target_file_path, "W")
+
+									if not file_exists then
+										vim.uv.fs_rename(original_file_path, target_file_path)
+
+										Snacks.rename.on_rename_file(original_file_path, target_file_path)
+									else
+										vim.notify(
+											"File '" .. target_file_path .. "' already exists! Skipping...",
+											vim.log.levels.ERROR
+										)
+									end
+
+									-- Refresh netrw
+									vim.cmd(":Ex " .. vim.b.netrw_curdir)
+								end
+							end
+						)
+					end, { remap = true, buffer = true })
+				end,
+			}),
+		},
 		picker = { enabled = true },
 		quickfile = { enabled = true },
-		scope = { enabled = true },
-		scroll = { enabled = true },
+		scope = {
+			-- absolute minimum size of the scope.
+			-- can be less if the scope is a top-level single line scope
+			min_size = 2,
+			-- try to expand the scope to this size
+			max_size = nil,
+			cursor = true, -- when true, the column of the cursor is used to determine the scope
+			edge = true, -- include the edge of the scope (typically the line above and below with smaller indent)
+			siblings = true, -- expand single line scopes with single line siblings
+			-- what buffers to attach to
+			filter = function(buf)
+				return vim.bo[buf].buftype == "" and vim.b[buf].snacks_scope ~= false and vim.g.snacks_scope ~= false
+			end,
+			-- debounce scope detection in ms
+			debounce = 30,
+			treesitter = {
+				-- detect scope based on treesitter.
+				-- falls back to indent based detection if not available
+				enabled = true,
+				injections = true, -- include language injections when detecting scope (useful for languages like `vue`)
+				---@type string[]|{enabled?:boolean}
+				blocks = {
+					enabled = true, -- enable to use the following blocks
+					"function_declaration",
+					"function_definition",
+					"method_declaration",
+					"method_definition",
+					"class_declaration",
+					"class_definition",
+					"do_statement",
+					"while_statement",
+					"repeat_statement",
+					"if_statement",
+					"for_statement",
+				},
+				-- these treesitter fields will be considered as blocks
+				field_blocks = {
+					"local_declaration",
+				},
+			},
+		},
+		scroll = {
+			animate = {
+				duration = { step = 200, total = 250 },
+				easing = "outQuart",
+			},
+			-- faster animation when repeating scroll after delay
+			animate_repeat = {
+				delay = 100, -- delay in ms before using the repeat animation
+				duration = { step = 5, total = 50 },
+				easing = "outQuart",
+			},
+			-- what buffers to animate
+			filter = function(buf)
+				return vim.g.snacks_scroll ~= false
+					and vim.b[buf].snacks_scroll ~= false
+					and vim.bo[buf].buftype ~= "terminal"
+			end,
+		},
 		statuscolumn = { enabled = true },
-		words = { enabled = true },
+		words = {
+			debounce = 200, -- time in ms to wait before updating
+			notify_jump = false, -- show a notification when jumping
+			notify_end = true, -- show a notification when reaching the end
+			foldopen = true, -- open folds after jumping
+			jumplist = true, -- set jump point before jumping
+			modes = { "n", "i", "c" }, -- modes to show references
+			filter = function(buf) -- what buffers to enable `snacks.words`
+				return vim.g.snacks_words ~= false and vim.b[buf].snacks_words ~= false
+			end,
+		},
 		styles = {
 			notification = {
 				wo = { wrap = true }, -- Wrap notifications
@@ -692,23 +915,6 @@ return {
 				else
 					vim.print = _G.dd
 				end
-
-				-- Create some toggle mappings
-				Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
-				Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
-				Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>uL")
-				Snacks.toggle.diagnostics():map("<leader>ud")
-				Snacks.toggle.line_number():map("<leader>ul")
-				Snacks.toggle
-					.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
-					:map("<leader>uc")
-				Snacks.toggle.treesitter():map("<leader>uT")
-				Snacks.toggle
-					.option("background", { off = "light", on = "dark", name = "Dark Background" })
-					:map("<leader>ub")
-				Snacks.toggle.inlay_hints():map("<leader>uh")
-				Snacks.toggle.indent():map("<leader>ug")
-				Snacks.toggle.dim():map("<leader>uD")
 			end,
 		})
 	end,
