@@ -40,7 +40,6 @@ return {
 						ensure_installed = { "lua_ls", "clangd" },
 					})
 					require("mason-tool-installer").setup({
-
 						ensure_installed = {
 							"stylua",
 							"luacheck",

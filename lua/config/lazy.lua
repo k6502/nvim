@@ -24,6 +24,7 @@ vim.o.number = true
 vim.o.relativenumber = true
 vim.o.termguicolors = true
 vim.o.cursorline = true
+vim.o.updatetime = 100
 
 -- Setup lazy.nvim
 require("lazy").setup({
@@ -36,6 +37,10 @@ require("lazy").setup({
 	install = { colorscheme = { "teide" } },
 	-- automatically check for plugin updates
 	checker = { enabled = true },
+	ui = {
+		-- 1000 / 180 approx 5.5ms
+		throttle = 1000 / 180,
+	},
 })
 
 vim.cmd([[colorscheme teide]])
