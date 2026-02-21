@@ -2,7 +2,6 @@ return {
 	"nvim-lualine/lualine.nvim",
 	lazy = false,
 	config = function()
-		local triforce = require("triforce.lualine").components()
 		require("lualine").setup({
 			options = {
 				icons_enabled = true,
