@@ -46,6 +46,7 @@ return {
 							"cpplint",
 							"clang-format",
 							"bacon",
+							"codelldb",
 						},
 						auto_update = true,
 					})
