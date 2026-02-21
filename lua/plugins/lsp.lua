@@ -37,7 +37,7 @@ return {
 					})
 					require("mason-nvim-dap").setup()
 					require("mason-lspconfig").setup({
-						ensure_installed = { "lua_ls", "clangd", "rust_analyzer" },
+						ensure_installed = { "lua_ls", "clangd", "rust_analyzer", "bacon_ls" },
 					})
 					require("mason-tool-installer").setup({
 						ensure_installed = {

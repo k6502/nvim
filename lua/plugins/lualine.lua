@@ -41,10 +41,6 @@ return {
 				lualine_b = { "branch", "diff", "diagnostics" },
 				lualine_c = { "filename" },
 				lualine_x = {
-					triforce.level,
-					triforce.achievements,
-					triforce.streak,
-					triforce.session_time,
 					"encoding",
 					"fileformat",
 					"filetype",
