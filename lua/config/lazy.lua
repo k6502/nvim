@@ -20,12 +20,13 @@ vim.opt.rtp:prepend(lazypath)
 -- This is also a good place to setup other settings (vim.opt)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
-vim.o.number = true
-vim.o.relativenumber = true
-vim.o.termguicolors = true
-vim.o.cursorline = true
-vim.o.updatetime = 250
-vim.o.laststatus = 3
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.termguicolors = true
+vim.opt.cursorline = true
+vim.opt.updatetime = 10000
+vim.opt.laststatus = 3
+vim.opt.lazyredraw = false
 
 -- Setup lazy.nvim
 require("lazy").setup({
