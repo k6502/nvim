@@ -37,14 +37,15 @@ return {
 					})
 					require("mason-nvim-dap").setup()
 					require("mason-lspconfig").setup({
-						ensure_installed = { "lua_ls", "clangd" },
+						ensure_installed = { "lua_ls", "clangd", "rust_analyzer" },
 					})
 					require("mason-tool-installer").setup({
 						ensure_installed = {
 							"stylua",
-							"luacheck",
+							"selene",
 							"cpplint",
 							"clang-format",
+							"bacon",
 						},
 						auto_update = true,
 					})

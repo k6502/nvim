@@ -1,0 +1,4 @@
+std = "luajit"
+
+[lints]
+undefined_variable = "allow" # vim tends to be seen as undefined.
