@@ -7,7 +7,7 @@ return {
 				lua = { "stylua" },
 				c = { "clang-format" },
 				cpp = { "clang-format" },
-				rust = { "rust-analyzer" },
+				rust = { "rustfmt" },
 			},
 			format_on_save = {
 				timeout_ms = 10000,
