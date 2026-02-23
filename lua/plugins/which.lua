@@ -1,7 +1,13 @@
 return {
 	"folke/which-key.nvim",
-	event = "VeryLazy",
-	opts = {},
+	dependencies = {
+		"nvim-mini/mini.icons",
+		"nvim-tree/nvim-web-devicons",
+	},
+	lazy = false,
+	opts = {
+		preset = "modern",
+	},
 	keys = {
 		{
 			"<leader>?",

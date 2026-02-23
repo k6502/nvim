@@ -1,6 +1,6 @@
 return {
 	"mfussenegger/nvim-lint",
-	event = { "BufReadPre", "BufNewFile" },
+	lazy = false,
 	config = function()
 		local lint = require("lint")
 
@@ -31,7 +31,7 @@ return {
 			rust = { "bacon" },
 		}
 
-		vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+		vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "TextChanged", "InsertLeave" }, {
 			callback = function()
 				lint.try_lint()
 			end,
