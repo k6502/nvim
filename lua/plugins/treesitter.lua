@@ -6,20 +6,6 @@ return {
 		{ "fei6409/log-highlight.nvim", opts = {} },
 	},
 	config = function()
-		vim.api.nvim_create_autocmd("User", {
-			pattern = "TSUpdate",
-			callback = function()
-				require("nvim-treesitter.parsers").haxe = {
-					install_info = {
-						url = "https://github.com/vantreeseba/tree-sitter-haxe",
-						files = { "src/parser.c", "src/scanner.c" },
-						branch = "main",
-					},
-					filetype = "haxe",
-				}
-			end,
-		})
-
 		require("nvim-treesitter").setup({
 			install_dir = vim.fn.stdpath("data") .. "/site",
 			highlight = {
@@ -63,7 +49,6 @@ return {
 			"kitty",
 			"latex",
 			"query",
-			"haxe", -- Included in the list
 		}
 
 		require("nvim-treesitter").install(parsers)
