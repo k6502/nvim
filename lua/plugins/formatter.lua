@@ -8,6 +8,7 @@ return {
 				c = { "clang-format" },
 				cpp = { "clang-format" },
 				rust = { "rustfmt" },
+				haskell = { "fourmolu" },
 			},
 			format_on_save = {
 				timeout_ms = 10000,

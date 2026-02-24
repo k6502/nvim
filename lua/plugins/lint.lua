@@ -29,6 +29,7 @@ return {
 			c = { "cpplint" },
 			cpp = { "cpplint" },
 			rust = { "bacon" },
+			haskell = { "hlint" },
 		}
 
 		vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "TextChanged", "InsertLeave" }, {

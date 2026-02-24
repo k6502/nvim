@@ -8,10 +8,6 @@ return {
 	config = function()
 		require("nvim-treesitter").setup({
 			install_dir = vim.fn.stdpath("data") .. "/site",
-			highlight = {
-				enable = true,
-				additional_vim_regex_highlighting = false,
-			},
 		})
 
 		local parsers = {
@@ -49,29 +45,17 @@ return {
 			"kitty",
 			"latex",
 			"query",
+			"haskell",
 		}
 
-		require("nvim-treesitter").install(parsers)
-
-		vim.o.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+		require("nvim-treesitter").install(parsers, { generate = true, summary = true })
 
 		vim.api.nvim_create_autocmd("FileType", {
+			pattern = parsers,
 			callback = function(args)
 				local bufnr = args.buf
-				local ft = vim.bo[bufnr].filetype
-				local ignore_ft = { "noice", "notify", "lspinfo", "checkhealth" }
-
-				if vim.tbl_contains(ignore_ft, ft) then
-					return
-				end
-
-				local lang = vim.treesitter.language.get_lang(ft) or ft
-				local has_parser, _ = pcall(vim.treesitter.get_parser, bufnr, lang)
-
-				if has_parser then
-					vim.treesitter.start(bufnr, lang)
-					vim.bo[bufnr].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-				end
+				pcall(vim.treesitter.start, bufnr)
+				vim.bo[bufnr].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 			end,
 		})
 	end,
