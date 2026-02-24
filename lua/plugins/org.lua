@@ -5,6 +5,7 @@ return {
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 		"nvim-treesitter/nvim-treesitter",
+		"nvim-neorg/lua-utils.nvim",
 		{
 			"3rd/image.nvim",
 			lazy = false,
