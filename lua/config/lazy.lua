@@ -36,7 +36,7 @@ require("lazy").setup({
 	},
 	-- Configure any other settings here. See the documentation for more details.
 	-- colorscheme that will be used when installing plugins.
-	install = { colorscheme = { "teide" } },
+	install = { colorscheme = { "monoglow-light" } },
 	-- automatically check for plugin updates
 	checker = { enabled = true },
 	ui = {
@@ -140,4 +140,4 @@ require("lazy").setup({
 	},
 })
 
-vim.cmd([[colorscheme teide]])
+vim.cmd([[colorscheme monoglow-light]])
