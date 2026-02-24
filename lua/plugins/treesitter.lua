@@ -48,7 +48,7 @@ return {
 			"haskell",
 		}
 
-		require("nvim-treesitter").install(parsers, { generate = true, summary = true })
+		require("nvim-treesitter").install(parsers, { generate = true, summary = false })
 
 		vim.api.nvim_create_autocmd("FileType", {
 			pattern = parsers,
