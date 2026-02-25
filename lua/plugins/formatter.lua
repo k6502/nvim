@@ -9,6 +9,9 @@ return {
 				cpp = { "clang-format" },
 				rust = { "rustfmt" },
 				haskell = { "fourmolu" },
+				css = { "prettierd" },
+				html = { "prettierd" },
+				toml = { "tombi" },
 			},
 			format_on_save = {
 				timeout_ms = 10000,

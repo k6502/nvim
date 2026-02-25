@@ -30,6 +30,9 @@ return {
 			cpp = { "cpplint" },
 			rust = { "bacon" },
 			haskell = { "hlint" },
+			html = { "htmlhint" },
+			css = { "stylelint" },
+			toml = { "tombi" },
 		}
 
 		vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "TextChanged", "InsertLeave" }, {
