@@ -21,7 +21,7 @@ return {
 					-- the default case_mode is "smart_case"
 				},
 				file_browser = {
-					theme = "monoglow-light",
+					theme = "koda",
 					-- disables netrw and use telescope-file-browser in its place
 					hijack_netrw = true,
 					mappings = {

@@ -140,4 +140,4 @@ require("lazy").setup({
 	},
 })
 
-vim.cmd([[colorscheme monoglow-light]])
+vim.cmd("colorscheme koda")
