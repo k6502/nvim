@@ -48,6 +48,7 @@ return {
 			"haskell",
 			"typst",
 			"scss",
+			"nix",
 		}
 
 		require("nvim-treesitter").install(parsers, { generate = true, summary = false })
